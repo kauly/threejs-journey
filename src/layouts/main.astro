@@ -14,11 +14,7 @@ const { bg } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>Astro Boilerplate</title>
   </head>
-  <body
-    class={`w-full h-screen ${
-      bg ? bg : "bg-blue-200"
-    } container max-w-lg mx-auto`}
-  >
+  <body class={`w-full h-screen ${bg ? bg : "bg-blue-200"} container mx-auto`}>
     <slot />
   </body>
 </html>
