@@ -1,3 +1,3 @@
-# Astro Boilerplate
+# Astro Threejs
 
-This my Astro boileplate it has Tailwind, prettier and import aliases already configured.
+This are my exercises from the famous [ThreeJS course](https://threejs-journey.com/) by Bruno Simon. So far so good.
