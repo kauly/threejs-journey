@@ -13,12 +13,14 @@
     "@astrojs/check": "^0.3.1",
     "@astrojs/tailwind": "^5.0.3",
     "astro": "^4.0.3",
+    "gsap": "^3.12.3",
     "tailwindcss": "^3.0.24",
     "three": "^0.159.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@types/three": "^0.159.0",
+    "lil-gui": "^0.19.1",
     "prettier": "^3.1.0",
     "prettier-plugin-astro": "^0.12.2"
   }

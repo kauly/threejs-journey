@@ -1,0 +1,80 @@
+---
+import Main from "@layouts/main.astro";
+---
+
+<Main bg="bg-yellow-200">
+  <h2 class="text-lg font-semibold py-8">cameras</h2>
+  <canvas class="webgl"></canvas>
+</Main>
+
+<script>
+  import * as THREE from "three";
+
+  const dimensions = {
+    width: 800,
+    height: 600,
+  };
+
+  const canvas = document.querySelector("canvas.webgl");
+  const scene = new THREE.Scene();
+
+  const object = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#0f0",
+    }),
+  );
+  scene.add(object);
+
+  // Cursor
+  const cursor = {
+    x: 0,
+    y: 0,
+  };
+
+  window.addEventListener("mousemove", (event) => {
+    cursor.x = event.clientX / dimensions.width - 0.5;
+    cursor.y = event.clientY / dimensions.height - 0.5;
+
+    console.log(cursor.x, cursor.y);
+  });
+
+  const camera = new THREE.PerspectiveCamera(
+    // vertical fov
+    75,
+    dimensions.width / dimensions.height,
+    0.1,
+    100,
+  );
+
+  const aspectRatio = dimensions.width / dimensions.height;
+  /* 
+  const camera = new THREE.OrthographicCamera(
+    -1 * aspectRatio,
+    1 * aspectRatio,
+    1,
+    -1,
+    0.1,
+    100,
+  ); */
+  camera.position.z = 4;
+  camera.position.x = 4;
+  camera.position.y = 4;
+  camera.lookAt(object.position);
+  scene.add(camera);
+
+  if (canvas) {
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(dimensions.width, dimensions.height);
+    const clock = new THREE.Clock();
+
+    const tick = () => {
+      const elapsedTime = clock.getElapsedTime();
+      object.rotation.y = elapsedTime;
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    tick();
+  }
+</script>

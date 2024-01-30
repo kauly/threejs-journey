@@ -1,0 +1,49 @@
+---
+import Main from "@layouts/main.astro";
+---
+
+<Main>
+  <div class="flex justify-center items-center w-full h-full">
+    <canvas id="webgl"></canvas>
+  </div>
+</Main>
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls";
+
+  const dimensions = {
+    width: 800,
+    height: 600,
+  };
+
+  const canvas = document.getElementById("webgl");
+  const scene = new THREE.Scene();
+
+  const object = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: "#3D251B" }),
+  );
+  scene.add(object);
+
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    dimensions.width / dimensions.height,
+  );
+  camera.lookAt(object.position);
+  camera.position.z = 3;
+  scene.add(camera);
+
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+
+  const renderer = new THREE.WebGLRenderer({ canvas });
+  renderer.setSize(dimensions.width, dimensions.height);
+
+  const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+  tick();
+</script>

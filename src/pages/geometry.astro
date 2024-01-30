@@ -1,0 +1,87 @@
+---
+import Main from "@layouts/main.astro";
+---
+
+<Main>
+  <canvas class="bg-white" id="webgl"></canvas>
+</Main>
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls";
+
+  const dimensions = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const canvas = document.getElementById("webgl");
+  const scene = new THREE.Scene();
+  const geometry = new THREE.BufferGeometry();
+
+  // fifty triangles
+  const count = 5000;
+  // every triangle has 3 vertices and every vertex occupy 3 positions of the array
+  const positionsArray = new Float32Array(count * 3 * 3);
+
+  for (let index = 0; index < count; index++) {
+    positionsArray[index] = Math.random() - 0.5;
+    console.log("🚀 ~ index:", index);
+  }
+
+  const positionsAttributes = new THREE.BufferAttribute(positionsArray, 3);
+  geometry.setAttribute("position", positionsAttributes);
+
+  const cube = new THREE.Mesh(
+    geometry,
+    new THREE.MeshBasicMaterial({ color: "#3D251B", wireframe: true }),
+  );
+  scene.add(cube);
+
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    dimensions.width / dimensions.height,
+  );
+  camera.position.z = 3;
+  camera.lookAt(cube.position);
+  scene.add(camera);
+
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+
+  const renderer = new THREE.WebGLRenderer({ canvas });
+  renderer.setSize(dimensions.width, dimensions.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const clock = new THREE.Clock();
+  const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  tick();
+
+  window.addEventListener("resize", () => {
+    dimensions.width = window.innerWidth;
+    dimensions.height = window.innerHeight;
+    camera.aspect = dimensions.width / dimensions.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(dimensions.width, dimensions.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  });
+
+  window.addEventListener("dblclick", () => {
+    const fullScreenElement =
+      document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fullScreenElement) {
+      canvas?.requestFullscreen
+        ? canvas?.requestFullscreen()
+        : canvas?.webkitRequestFullscreen();
+    } else {
+      document.exitFullscreen
+        ? document.exitFullscreen()
+        : document.webkitExitFullscreen();
+    }
+  });
+</script>

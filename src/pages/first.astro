@@ -24,11 +24,39 @@ import Main from "@layouts/main.astro";
   // scene
   const scene = new THREE.Scene();
 
+  // group
+  const group = new THREE.Scene();
+  group.rotation.y = 2;
+  scene.add(group);
+
   // object
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#f00",
+    }),
+  );
+  const cube2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#0f0",
+    }),
+  );
+  const cube3 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#00f",
+    }),
+  );
+  group.add(cube1, cube2, cube3);
+
+  cube1.position.x = -2;
+  cube2.position.x = 0;
+  cube3.position.x = 2;
+
+  // axes helper
+  const axesHelper = new THREE.AxesHelper();
+  scene.add(axesHelper);
 
   // camera
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);

@@ -1,0 +1,71 @@
+---
+import Main from "@layouts/main.astro";
+---
+
+<Main>
+  <canvas class="bg-white" id="webgl"></canvas>
+</Main>
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls";
+
+  const canvas = document.getElementById("webgl");
+
+  const dimensions = {
+    width: 800,
+    height: 600,
+  };
+
+  const cursor = {
+    x: 0,
+    y: 0,
+  };
+
+  window.addEventListener("mousemove", (ev) => {
+    cursor.x = ev.clientX / dimensions.width - 0.5;
+    cursor.y = -(ev.clientY / dimensions.height - 0.5);
+    console.log("🚀 ~ window.addEventListener ~  cursor.y:", cursor.y);
+  });
+
+  const aspectRatio = dimensions.width / dimensions.height;
+
+  const scene = new THREE.Scene();
+
+  const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#3D251B",
+    }),
+  );
+  cube.rotateY(2);
+  cube.rotateZ(2);
+
+  const camera = new THREE.PerspectiveCamera(86, aspectRatio, 1, 100);
+  camera.lookAt(cube.position);
+  camera.position.z = 4;
+
+  scene.add(cube);
+  scene.add(camera);
+
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+
+  if (canvas) {
+    const clock = new THREE.Clock();
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(dimensions.width, dimensions.height);
+
+    const tick = () => {
+      const elapsedTime = clock.getElapsedTime();
+      /*       camera.position.x = Math.sin(cursor.x * 2 * Math.PI) * 2;
+      camera.position.z = Math.cos(cursor.x * 2 * Math.PI) * 2;
+      camera.position.y = cursor.y * 3;
+      camera.lookAt(cube.position); */
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+</script>

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  bg: string;
+  bg?: string;
 }
 
 const { bg } = Astro.props;
@@ -14,7 +14,7 @@ const { bg } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>Astro Boilerplate</title>
   </head>
-  <body class={`w-full h-screen ${bg ? bg : "bg-blue-200"} container mx-auto`}>
+  <body class={`w-full h-screen ${bg ? bg : "bg-blue-200"}  `}>
     <slot />
   </body>
 </html>

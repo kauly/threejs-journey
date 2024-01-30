@@ -1,0 +1,60 @@
+---
+import Main from "@layouts/main.astro";
+---
+
+<Main bg="bg-yellow-200">
+  <h2 class="text-lg font-semibold py-8">animation</h2>
+  <canvas class="webgl"></canvas>
+</Main>
+
+<script>
+  import * as THREE from "three";
+  import gsap from "gsap";
+
+  // sizes
+  const sizes = {
+    width: 800,
+    height: 600,
+  };
+
+  // canvas
+  const canvas = document.querySelector("canvas.webgl");
+
+  // scene
+  const scene = new THREE.Scene();
+
+  // object
+  const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: "#f00",
+    }),
+  );
+
+  scene.add(cube1);
+
+  // camera
+  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+  camera.position.z = 4;
+  scene.add(camera);
+
+  // renderer
+
+  const renderer = new THREE.WebGLRenderer({ canvas });
+  renderer.setSize(sizes.width, sizes.height);
+
+  // const clock = new THREE.Clock();
+
+  gsap.to(cube1.position, { x: 2, duration: 1, delay: 1 });
+  gsap.to(cube1.position, { x: -2, duration: 1, delay: 1 });
+
+  // animations
+  const tick = () => {
+    // const elapsedTime = clock.getElapsedTime();
+
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(tick);
+  };
+
+  tick();
+</script>
